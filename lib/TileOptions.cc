@@ -27,7 +27,7 @@ NAN_MODULE_INIT(TileOptions::Init) {
 
 	Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("InitialBadgeCount").ToLocalChecked(), TileOptions::HandleGetters, TileOptions::HandleSetters);
 
-	target->Set(Nan::New("TileOptions").ToLocalChecked(), ctor->GetFunction());
+	Nan::Set(target, Nan::New("TileOptions").ToLocalChecked(), Nan::GetFunction(ctor).ToLocalChecked());
 }
 
 NAN_METHOD(TileOptions::New) {
@@ -94,6 +94,9 @@ NAN_GETTER(TileOptions::HandleGetters) {
 NAN_SETTER(TileOptions::HandleSetters) {
 	TileOptions* self = Nan::ObjectWrap::Unwrap<TileOptions>(info.This());
 
+	// v8::Isolate* isolate = v8::Isolate::GetCurrent();
+  // v8::Local<v8::Context> context = isolate->GetCurrentContext();
+
 	std::string propertyName = std::string(*Nan::Utf8String(property));
 
 	if (propertyName == "Square70x70Logo") {
@@ -117,21 +120,21 @@ NAN_SETTER(TileOptions::HandleSetters) {
 		self->BackgroundColor = std::string(*Nan::Utf8String(local));
 	}
 	else if (propertyName == "ForegroundText") {
-		self->ForegroundText = value->Int32Value();
+		self->ForegroundText = Nan::To<int32_t>(value).FromJust();
 	}
 	else if (propertyName == "ShowNameOnSquare150x150Logo") {
-		self->ShowNameOnSquare150x150Logo = value->BooleanValue();
+		self->ShowNameOnSquare150x150Logo = Nan::To<bool>(value).FromJust();
 	}
 	else if (propertyName == "ShowNameOnWide310x150Logo") {
-		self->ShowNameOnWide310x150Logo = value->BooleanValue();
+		self->ShowNameOnWide310x150Logo = Nan::To<bool>(value).FromJust();
 	}
 	else if (propertyName == "ShowNameOnSquare310x310Logo") {
-		self->ShowNameOnSquare310x310Logo = value->BooleanValue();
+		self->ShowNameOnSquare310x310Logo = Nan::To<bool>(value).FromJust();
 	}
 	else if (propertyName == "RoamingEnabled") {
-		self->RoamingEnabled = value->BooleanValue();
+		self->RoamingEnabled = Nan::To<bool>(value).FromJust();
 	}
 	else if (propertyName == "InitialBadgeCount") {
-		self->InitialBadgeCount = value->Int32Value();
+		self->InitialBadgeCount = Nan::To<int32_t>(value).FromJust();
 	}
 }
